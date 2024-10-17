@@ -1,7 +1,7 @@
 -- Weighted Average score 
--- creates a stored procedure ComputeAverageScoreForUser that computes and store the average score for a student
+-- creates a stored procedure ComputeAverageWeightedScoreForUser that computes and store the average score for a student
 DELIMITER $$
-CREATE PROCEDURE ComputeAverageScoreForUser(IN id INT)
+CREATE PROCEDURE ComputeAverageWeightedScoreForUser(IN id INT)
 BEGIN
 	-- Get project id by project name
 	DECLARE student_sum INT;

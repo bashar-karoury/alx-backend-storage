@@ -5,4 +5,4 @@ AS SELECT name
 FROM students
 WHERE score < 80 AND
 (last_meeting IS NULL OR
-DATEDIFF(last_meeting, CURDATE()) > 30);                                     
+DATEDIFF(CURDATE(), last_meeting) > 30);                                     

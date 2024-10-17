@@ -8,7 +8,7 @@ BEGIN
 	DECLARE student_weight_sum INT;
 	DECLARE student_average FLOAT DEFAULT 0;
 	DECLARE student_id INT DEFAULT 0;
-
+	DECLARE finished INT DEFAULT 0;
 	-- create cursor to loop thru users
 
 	-- Declare a cursor to fetch all student ids

@@ -12,9 +12,8 @@ BEGIN
     	INTO student_sum, student_weight_sum
     	FROM corrections
     	JOIN projects ON corrections.project_id = projects.id
-    	WHERE corrections.user_id = user_id;
-
-	IF student_count <> 0 THEN
+    	WHERE corrections.user_id = id;
+	IF student_weight_sum <> 0 THEN
 		SET student_average = student_sum / student_weight_sum;
 	END IF;
 	UPDATE users

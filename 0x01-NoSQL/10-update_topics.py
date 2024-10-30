@@ -7,4 +7,4 @@ def update_topics(mongo_collection, name, topics):
         document based on the name
     """
 
-    return mongo_collection.update_one({"name": name}, {"$set": {"topics": topics}})
+    return mongo_collection.update_many({"name": name}, {"$set": {"topics": topics}})

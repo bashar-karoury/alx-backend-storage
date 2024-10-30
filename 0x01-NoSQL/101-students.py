@@ -21,5 +21,4 @@ def top_students(mongo_collection):
                 {"_id": student["_id"]},  # Filter for the current student
                 {"$set": {"averageScore": average_score}}  # Set the new field
             )
-            print(student)
     return list(mongo_collection.find().sort("averageScore", pymongo.DESCENDING))

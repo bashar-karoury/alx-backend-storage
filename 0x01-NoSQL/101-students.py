@@ -16,7 +16,6 @@ def top_students(mongo_collection):
             for topic in student["topics"]:
                 sum_scores += topic["score"]
             average_score = sum_scores / len(student["topics"])
-            print(average_score)
             # Update the document with the new 'average' field
             mongo_collection.update_one(
                 {"_id": student["_id"]},  # Filter for the current student

@@ -1,8 +1,2 @@
 //  inserts a document in the collection school
-const dbName = process.argv[2];
-const db = connect("mongodb://127.0.0.1:27017/" + dbName);
-const document = {
-    'name': "Holberton school"
-};
-
-const result = db.school.insertOne(document);
+db.school.insert({name: "Holberton school"})

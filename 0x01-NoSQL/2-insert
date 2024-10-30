@@ -1,12 +1,8 @@
 //  inserts a document in the collection school
 const dbName = process.argv[2];
-printjson(dbName);
-// Connect to the database
 const db = connect("mongodb://127.0.0.1:27017/" + dbName);
-// Define the document to be inserted
 const document = {
     'name': "Holberton school"
 };
 
-// Insert the document into the 'school' collection
 const result = db.school.insertOne(document);

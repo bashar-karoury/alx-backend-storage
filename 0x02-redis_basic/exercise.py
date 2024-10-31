@@ -3,7 +3,7 @@
 Cache Class Wrapper of Redis
 """
 import redis
-from typing import Union
+from typing import Union, Callable
 import uuid
 
 
@@ -20,3 +20,14 @@ class Cache:
         key = str(uuid.uuid4())
         result = self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Union[Callable, None]) -> str:
+        """ gets data from Redis using provided function to parse 
+            the result return
+        """
+
+        result = self._redis.get(key)
+        if fn:
+            return fn(result)
+        else:
+            return result

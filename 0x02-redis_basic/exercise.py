@@ -21,7 +21,7 @@ class Cache:
         result = self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Union[Callable, None]) -> str:
+    def get(self, key: str, fn: Union[Callable, None] = None) -> str:
         """ gets data from Redis using provided function to parse 
             the result return
         """

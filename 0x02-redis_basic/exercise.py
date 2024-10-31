@@ -31,3 +31,11 @@ class Cache:
             return fn(result)
         else:
             return result
+
+    def get_str(self, key: str) -> str:
+        """ get value of key from Redis and encode it into string"""
+        return self.get(key, str)
+
+    def get_int(self, key: str) -> str:
+        """ get value of key from Redis and encode it into int"""
+        return self.get(key, int)

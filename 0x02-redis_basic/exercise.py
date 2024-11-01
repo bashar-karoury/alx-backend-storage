@@ -5,6 +5,7 @@ Cache Class Wrapper of Redis
 import redis
 from typing import Union, Callable
 import uuid
+from functools import wraps
 
 
 class Cache:
@@ -14,6 +15,16 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    def count_calls(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+
+            result = func(self, *args, **kwargs)
+            self._redis.incr(func.__qualname__, 1)
+            return result
+        return wrapper
+
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ stores data in Redis using random generated key and return
             the key """

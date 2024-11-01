@@ -14,13 +14,18 @@ def cache_url(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(url):
         local_redis = redis.Redis()
-        result = method(url)
-        # Increment the count or create it with expiration
-        if not local_redis.exists(f'count:{url}'):  # Check if the key exists
-            # Set the key with expiration
-            local_redis.set(f'count:{url}', 1, ex=10)
-        else:
+
+        # if there is a cache return it
+        if local_redis.exists(f'cache:{url}'):
             local_redis.incr(f'count:{url}')  # Increment if it already exists
+            # print('From Cache')
+            return local_redis.get(f'cache:{url}')
+        else:
+            local_redis.set(f'count:{url}', 1, ex=10)
+            # print('From url')
+            result = method(url)
+            local_redis.set(f'cache:{url}', result, ex=10)
+
         return result
     return wrapper
 

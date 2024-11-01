@@ -23,11 +23,14 @@ def replay(method: Callable) -> None:
     call_times = int(local_redis.get(method.__qualname__))
     print(f'{method.__qualname__} was called {call_times} times:')
     for input, output in inputs_outputs:
+        decoded_input = input.decode("utf-8")
+        decoded_output = output.decode("utf-8")
         print(
-            f'{method.__qualname__}(*{input.decode("utf-8")}) -> {output.decode("utf-8")}')
+            f'{method.__qualname__}(*{decoded_input}) -> {decoded_output}')
 
 
 def count_calls(method: Callable) -> Callable:
+    """ decorator to count calles for passed method"""
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         result = method(self, *args, **kwargs)
@@ -37,6 +40,7 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
+    """ decorator to store inputs and outputs of passed method"""
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         # push inputs
@@ -65,7 +69,7 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Union[Callable, None] = None) -> str:
-        """ gets data from Redis using provided function to parse 
+        """ gets data from Redis using provided function to parse
             the result return
         """
 

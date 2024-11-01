@@ -14,19 +14,13 @@ def cache_url(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(url):
         local_redis = redis.Redis()
-
-        # if there is a cache return it
-        if local_redis.exists(f'cache:{url}'):
-            local_redis.incr(f'count:{url}')  # Increment if it already exists
-            return local_redis.get(f'cache:{url}').decode('utf-8')
-        else:
-            local_redis.set(f'count:{url}', 1, ex=10)
-
-            result = method(url)
-            local_redis.set(f'cache:{url}', result)
-            local_redis.expire(f'cache:{url}', 10)
-
-        return result
+        local_redis.incr(f"count:{url}")
+        cached_html = local_redis.get(f"cached:{url}")
+        if cached_html:
+            return cached_html.decode('utf-8')
+        html = method(url)
+        local_redis.setex(f"cached:{url}", 10, html)
+        return html
     return wrapper
 
 

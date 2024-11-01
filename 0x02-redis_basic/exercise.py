@@ -8,11 +8,11 @@ import uuid
 from functools import wraps
 
 
-def count_calls(func: Callable) -> Callable:
-    @wraps(func)
+def count_calls(method: Callable) -> Callable:
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
-        result = func(self, *args, **kwargs)
-        self._redis.incr(func.__qualname__, 1)
+        result = method(self, *args, **kwargs)
+        self._redis.incr(method.__qualname__, 1)
         return result
     return wrapper
 

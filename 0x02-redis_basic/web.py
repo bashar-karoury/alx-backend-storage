@@ -39,13 +39,13 @@ def get_page(url: str) -> str:
     return result.text
 
 
-local_redis = redis.Redis()
-url = 'https://slowwly.robertomurray.co.uk/'
-local_redis.delete(f'count:{url}')
-local_redis.delete(f'cache:{url}')
-for _ in range(20):
-    get_page(url)
-    import time
-    time.sleep(2)
-    # print(local_redis.get(f'count:{url}'))
-    # print(local_redis.ttl(f'cache:{url}'))
+# local_redis = redis.Redis()
+# url = 'https://slowwly.robertomurray.co.uk/'
+# local_redis.delete(f'count:{url}')
+# local_redis.delete(f'cache:{url}')
+# for _ in range(20):
+#     get_page(url)
+#     import time
+#     time.sleep(2)
+#     # print(local_redis.get(f'count:{url}'))
+#     # print(local_redis.ttl(f'cache:{url}'))

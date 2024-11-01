@@ -18,13 +18,13 @@ def cache_url(method: Callable) -> Callable:
         # if there is a cache return it
         if local_redis.exists(f'cache:{url}'):
             local_redis.incr(f'count:{url}')  # Increment if it already exists
-            # print('From Cache')
             return local_redis.get(f'cache:{url}').decode('utf-8')
         else:
             local_redis.set(f'count:{url}', 1, ex=10)
-            # print('From url')
+
             result = method(url)
-            local_redis.set(f'cache:{url}', result, ex=10)
+            local_redis.set(f'cache:{url}', result)
+            local_redis.expire(f'cache:{url}', 10)
 
         return result
     return wrapper
@@ -39,10 +39,13 @@ def get_page(url: str) -> str:
     return result.text
 
 
-# local_redis = redis.Redis()
-# url = 'https://slowwly.robertomurray.co.uk/'
-# print(get_page(url))
-
-
-# print(local_redis.get(f'count:{url}'))
-# print(local_redis.ttl(f'count:{url}'))
+local_redis = redis.Redis()
+url = 'https://slowwly.robertomurray.co.uk/'
+local_redis.delete(f'count:{url}')
+local_redis.delete(f'cache:{url}')
+for _ in range(20):
+    get_page(url)
+    import time
+    time.sleep(2)
+    # print(local_redis.get(f'count:{url}'))
+    # print(local_redis.ttl(f'cache:{url}'))

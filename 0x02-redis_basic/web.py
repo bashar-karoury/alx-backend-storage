@@ -19,7 +19,7 @@ def cache_url(method: Callable) -> Callable:
         if local_redis.exists(f'cache:{url}'):
             local_redis.incr(f'count:{url}')  # Increment if it already exists
             # print('From Cache')
-            return local_redis.get(f'cache:{url}')
+            return local_redis.get(f'cache:{url}').decode('utf-8')
         else:
             local_redis.set(f'count:{url}', 1, ex=10)
             # print('From url')

@@ -8,6 +8,24 @@ import uuid
 from functools import wraps
 
 
+def replay(method: Callable) -> None:
+    """ Function to Retriev lists"""
+
+    local_redis = redis.Redis()
+    # Retrieve both lists
+    # Gets all elements in inputs list
+    method_inputs = local_redis.lrange(f'{method.__qualname__}:inputs', 0, -1)
+    # Gets all elements in outputs list
+    method_outputs = local_redis.lrange(
+        f'{method.__qualname__}:outputs', 0, - 1)
+    # Use zip to pair user IDs and usernames
+    inputs_outputs = list(zip(method_inputs, method_outputs))
+    call_times = int(local_redis.get(method.__qualname__))
+    print(f'{method.__qualname__} was called {call_times} times:')
+    for input, output in inputs_outputs:
+        print(f'{method.__qualname__}({input}) -> {output}')
+
+
 def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self, *args, **kwargs):

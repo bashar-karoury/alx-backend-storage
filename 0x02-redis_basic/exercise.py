@@ -23,7 +23,8 @@ def replay(method: Callable) -> None:
     call_times = int(local_redis.get(method.__qualname__))
     print(f'{method.__qualname__} was called {call_times} times:')
     for input, output in inputs_outputs:
-        print(f'{method.__qualname__}({input}) -> {output}')
+        print(
+            f'{method.__qualname__}(*{input.decode("utf-8")}) -> {output.decode("utf-8")}')
 
 
 def count_calls(method: Callable) -> Callable:

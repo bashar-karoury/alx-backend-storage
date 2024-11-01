@@ -8,21 +8,21 @@ import uuid
 from functools import wraps
 
 
+def count_calls(func: Callable) -> Callable:
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        result = func(self, *args, **kwargs)
+        self._redis.incr(func.__qualname__, 1)
+        return result
+    return wrapper
+
+
 class Cache:
     """ Class to set and get data from redis server"""
 
     def __init__(self) -> None:
         self._redis = redis.Redis()
         self._redis.flushdb()
-
-    def count_calls(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(self, *args, **kwargs):
-
-            result = func(self, *args, **kwargs)
-            self._redis.incr(func.__qualname__, 1)
-            return result
-        return wrapper
 
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
